@@ -1,0 +1,102 @@
+---
+modules:
+  .clients_importer
+---
+include:
+  - constants.yml
+  - client_interview.yml
+  - questions.yml
+  - tables.yml
+  - signature.yml
+  - base64flinders_icon.yml
+---
+objects:
+  - MJFclients: MJFClientData
+---
+# This drives the program
+mandatory: True
+code: |
+  # Work out whether we're in the main program or if we
+  # are running a client response interview
+  if url_args.get('client_firstname') is None:
+    # Means we're in the mailing list portion
+    data_file
+    display_list
+    final_screen
+  else:
+    # Otherwise, we're in the client form which is in
+    # client_interview
+    handover_screen
+    receipt_email_status
+    receipt_final_screen
+---
+# Initialise object and get client data
+code: |
+  if not MJFclients.populated:
+    MJFclients.read_in_data(data_file)
+  MJFclients.clients_list.gathered = True
+---
+# Prepares the recipient
+code: |
+  MJFclients.clients_list[i]['recipient'] = Individual()
+  MJFclients.clients_list[i]['recipient']
+  MJFclients.clients_list[i]['recipient'].name.first = MJFclients.clients_list[i]['first_name']
+  MJFclients.clients_list[i]['recipient'].name.last = MJFclients.clients_list[i]['last_name']
+  MJFclients.clients_list[i]['recipient'].email = MJFclients.clients_list[i]['email']
+---
+# Sends the email
+code: |
+  MJFclients.clients_list[i]['email_status'] = send_email(
+      sender=email_sender,
+      cc=email_cc,
+      to=MJFclients.clients_list[i]['recipient'],
+      template=MJFfirst_email_message
+  )
+---
+template: MJFfirst_email_message
+subject: |
+  LLAW3301: Law in a Digital Age - Application Handover
+content: |
+  Dear ${MJFclients.clients_list[i]['recipient'].name.first.strip()},
+
+  Thanks for your support this semester for *LLAW3301: Law in a Digital Age*.
+
+  This email commences the handover process for your application (${MJFclients.clients_list[i]['app_name']}),
+  so that it can be used by you in production.
+
+  Please 
+  [register your intent](${MJFclients.clients_list[i]['interview_URL']})
+  (or otherwise) to commission
+  your application. You will receive an email confirming your intentions.
+
+  If you do not wish to take the applications developed for you into production,
+  you have the option to continue to work with us in subsequent semesters, or to
+  refine the applications developed for you to make them production ready. 
+  You will be able to indicate this once you click on the link above.
+
+  If you do wish to take your application into production, your receipt will
+  include a pro forma Application Review Rorm. Please complete this form ${ arf_completion_date }
+  and bring it with you to your Review Meeting.
+
+  You should receive an email confirming your review meeting ${ rm_notif_date }.
+
+  Please contact me if you have any questions.
+
+  Mark
+
+  ${email_signature}
+---
+# Construct interview_url
+code: |
+  MJFclients.clients_list[i]['interview_URL'] = '{}&new_session=1&client_firstname={}&client_lastname={}&client_email={}&client_application={}&app_link={}'.format(
+    base_url,
+    MJFclients.clients_list[i]['first_name'],
+    MJFclients.clients_list[i]['last_name'],
+    MJFclients.clients_list[i]['email'],
+    MJFclients.clients_list[i]['app_name'],
+    MJFclients.clients_list[i]['app_link']
+  )
+---
+code: |
+  base_url = interview_url().split('&session')[0]
+---

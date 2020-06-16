@@ -1,0 +1,41 @@
+# We keep constants in here.  In theory, you should have to
+# only come here to change values in order to customise this
+# app
+---
+objects:
+  - email_sender: Individual
+  - email_cc: Individual
+---
+# Set the values of the sender email.  This is 
+# the 'From' address for all emails sent by this
+# app
+code: |
+  email_sender.name.first = 'Mark'
+  email_sender.name.last = 'Ferraretto'
+  email_sender.email = 'mark.ferraretto@flinders.edu.au'
+---
+# If you want a cc address, then set it here.  If you
+# don't want a cc, set it to DAEmpty()
+code: |
+  # email_cc.name.first = 'Tania'
+  # email_cc.name.last = 'Leiman'
+  # email_cc.email = 'tania.leiman@flinders.edu.au'
+  email_cc = DAEmpty()
+---
+# Text to be displayed as the review meeting timeframe.
+# Used in the receipt email.  Need to specity 'in' or 'on'
+# depending on the rest of the string so that it appears
+# to be grammatically correct.
+code: |
+  review_meeting_timeframe = 'in early July'
+---
+# Text to be displayed for client to complete 
+# Application Review Form
+code: |
+  arf_completion_date = 'by **3 July 2020**'
+---
+# Text to display when email for review meeting
+# will be sent
+code: |
+  rm_notif_date = 'at the end of June'
+---

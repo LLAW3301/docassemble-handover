@@ -1,0 +1,33 @@
+table: invites_table
+rows: MJFclients.clients_list
+columns:
+  - Name: |
+      '<a href="mailto:{}">{} {}</a>'.format(row_item['email'], row_item['first_name'], row_item['last_name'])
+  - Application: |
+      '<a href="{}">{}</a>'.format(row_item['app_link'], row_item['app_name'])
+edit:
+  - elements['first_name']
+  - elements['last_name']
+  - elements['email']
+---
+# For editing a table row item
+question: Edit Item
+fields:
+  - First Name: MJFclients.clients_list[i].elements['first_name']
+  - Last Name: MJFclients.clients_list[i].elements['last_name']
+  - Email Address: MJFclients.clients_list[i].elements['email']
+---
+# There is never another record
+code: |
+  MJFclients.clients_list.there_is_another = False
+---
+table: sent_invites
+rows: MJFclients.clients_list
+columns:
+  - Name: |
+      '<a href="mailto:{}">{} {}</a>'.format(row_item['email'], row_item['first_name'], row_item['last_name'])
+  - Application: |
+      '<a href="{}">{}</a>'.format(row_item['app_link'], row_item['app_name'])
+  - Send Status: |
+      row_item['email_status']
+---

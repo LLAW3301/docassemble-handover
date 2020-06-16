@@ -1,0 +1,171 @@
+# This file manages the interview with the client gets to record
+# their intentions regarding commissioning of their application
+---
+# Screen presented to clients
+question: |
+  Application Handover
+subquestion: |
+  Please indicate whether you intend to commission your application
+  ([${url_args.get('client_application', 'Not specified')}](${url_args.get('app_link', 'Not specified')}))
+  for use in a production environment.
+fields:
+  - Confirm Application Name:  client_application
+    default: ${ url_args.get('client_application')}
+  - Application Contact First Name: client_firstname
+    default: ${ url_args.get('client_firstname')}
+  - Application Contact Last Name: client_lastname
+    default: ${ url_args.get('client_lastname')}
+  - Application Contact Email: client_email
+    default: ${ url_args.get('client_email')}
+  - I wish to commission my application into production: client_commission
+    datatype: yesnoradio
+  - My application is not ready for production use.  I would like to subsequent Digital Age classes to refine it: client_notready
+    datatype: yesnoradio
+    show if:
+      variable: client_commission
+      is: False
+  - I would like to work with a subsequent Digital Age class to develop another application: client_anotherclass
+    datatype: yesnoradio
+continue button field: handover_screen
+---
+# Final screen. Thanks user and notifies them that they
+# will receive an email.
+event: receipt_final_screen
+question: |
+  Application Handover
+subquestion: |
+  Thankyou for completing this form.
+
+  %if client_commission:
+  We look forward to working through the commissioning process with you.
+
+  You will shortly receive an email containing a record of your responses
+  to this form and an Application Review Form.
+
+  Please record any changes you would like made to your application in this
+  Application Review Form.  No change is too small or too large!
+
+  We will review your Application Review Form at the Review Meeting which
+  will be scheduled ${ review_meeting_timeframe }.
+  %else:
+  You will shortly receive an email containing a record of your responses
+  to this form.
+
+  %if client_notready:
+  We will be in touch with you to discuss your application, what modifications
+  you require, and work through scheduling your application into a subsequent
+  class.
+  %endif
+  %endif
+buttons:
+  - Exit: exit
+    url: https://flinders.edu.au
+  - Restart: restart
+---
+template: client_email_receipt
+subject: |
+  LLAW3301: Law in a Digital Age - Handover Form Receipt
+content: |
+  **To:** ${client_firstname} ${client_lastname}
+  [BR]**Email:** ${client_email}
+  [BR]**Application:** ${client_application}
+
+  Dear ${ client_firstname },
+
+  Thank you for completing the *LLAW3301: Law in a Digital Age*
+  Application Handover online form.
+
+  You have indicated that you:
+  %if client_commission:
+  **do**
+  %else:
+  **do not**
+  %endif
+  wish to have the Application handed over to you.
+
+  You have also indicated that you
+  %if client_anotherclass:
+  **would**
+  %else:
+  **would not**
+  %endif
+  like to work with future *Digital Age* classes to develop other applications.
+
+  %if client_commission:
+  Please find attached to this email a pro forma Application Review Document.
+  As per the *Application Handover and Commissioning Process* document sent to 
+  you earlier, the Application Review Document is used to record changes that
+  you require before your application can be used in a production environment.
+
+  The changes you record in your Application Review Document will be discussed
+  and prioritised at your Review meeting **${ review_meeting_timeframe }**
+  %else:
+  We thank you for your support this semester.
+  %if client_notready:
+
+  You have indicated that you **would** like to have your application worked on in
+  a subsquent class.  It is possible for applications to worked on by multiple
+  classes provided that there is a legal issue to be resolved as part of the
+  changes requried.
+
+  We will get in touch with you shortly to discuss how you would like subsequent
+  classes to modify your application.
+  %endif
+  %endif
+
+  Should you have any questions, please do not hesitate to contact ${email_sender.name}
+  by reply email.
+
+  Regards,
+
+  ${email_sender.name.first}
+
+  ${email_signature}
+---
+# Prepares the recipient
+code: |
+  MJFreceipt_recipient = Individual()
+  MJFreceipt_recipient
+  MJFreceipt_recipient.name.first = client_firstname
+  MJFreceipt_recipient.name.last = client_lastname
+  MJFreceipt_recipient.email = client_email
+---
+# Sends the email
+code: |
+  if client_commission:
+    receipt_email_status = send_email(
+        sender=email_sender,
+        cc=email_cc,
+        bcc=email_sender,
+        to=MJFreceipt_recipient,
+        template=client_email_receipt,
+        attachments=[Application_Review_Form]
+    )
+  else:
+    receipt_email_status = send_email(
+        sender=email_sender,
+        cc=email_cc,
+        bcc=email_sender,
+        to=MJFreceipt_recipient,
+        template=client_email_receipt
+    )
+
+---
+attachment:
+  variable name: Application_Review_Form
+  filename: Application_Review_Form
+  docx template file: Application_Review_Form.docx
+  valid formats: 
+    - docx
+---
+# Prepares a mailto: link for insertion into the word document
+code: |
+  client_email_markdown = '[{}]({})'.format(client_email, client_email)
+---
+# Prepares the application name with a hyperlink for insertion into the
+# Word doc
+code: |
+  client_application_markdown = '[{}]({})'.format(client_application, url_args.get('app_link'))
+---
+
+  

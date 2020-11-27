@@ -61,8 +61,28 @@ content: |
 
   Thanks for your support this semester for *LLAW3301: Law in a Digital Age*.
 
-  This email commences the handover process for your application (${MJFclients.clients_list[i]['app_name']}),
-  so that it can be used by you in production.
+  The semester has now completed and your application is ready for you to review and
+  to use 'live' should you wish to do so.
+
+  Please find below a link to the final version of your app and also to a short
+  Presentation Video prepared by your student group for you:
+
+  * Link to your app: [${MJFclients.clients_list[i]['app_name']}](${MJFclients.clients_list[i]['app_link']})
+  * Link to [Presentation Video](${MJFclients.clients_list[i]['video_link']})
+
+  **Please Note:**  The linked version of your app
+  is currently hosted on our teaching servers.  We recommend that you do
+  not use this app for production purposes until you have commissioned your own version
+  as we cannot guarantee the availability of our teaching servers, particularly during
+  non-teaching periods.
+
+  This email commences the process for handing over your application (${MJFclients.clients_list[i]['app_name']}),
+  to you for use by you in a live production environment.  An overview of the 
+  entire handover process is available in 
+  [this document](https://flinders-my.sharepoint.com/:b:/g/personal/ferr0182_flinders_edu_au/Ee6uHLscUOZAmm8P9mBIHwkBI0YTQyfVEOp5DZLnORaakg?e=AhDq8L).
+
+  The first step in this process is to register your intent to commission your app
+  into production (should you wish to do so).
 
   Please 
   [register your intent](${MJFclients.clients_list[i]['interview_URL']})
@@ -75,10 +95,14 @@ content: |
   You will be able to indicate this once you click on the link above.
 
   If you do wish to take your application into production, your receipt will
-  include a pro forma Application Review Rorm. Please complete this form ${ arf_completion_date }
+  include a pro forma Application Review Form (as described in the
+  [Handover Process document](https://flinders-my.sharepoint.com/:b:/g/personal/ferr0182_flinders_edu_au/Ee6uHLscUOZAmm8P9mBIHwkBI0YTQyfVEOp5DZLnORaakg?e=AhDq8L)
+  ).
+  Please complete this form ${ arf_completion_date }
   and bring it with you to your Review Meeting.
 
-  You should receive an email confirming your review meeting ${ rm_notif_date }.
+  Subject to a timely registration, you should receive an 
+  email confirming your Review Meeting ${ rm_notif_date }.
 
   Please contact me if you have any questions.
 

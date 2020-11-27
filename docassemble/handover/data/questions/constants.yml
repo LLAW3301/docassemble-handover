@@ -15,27 +15,34 @@ code: |
   email_sender.email = 'mark.ferraretto@flinders.edu.au'
 ---
 # If you want a cc address, then set it here.  If you
-# don't want a cc, set it to DAEmpty()
+# don't want a cc, set it to DAEmpty().  If you want
+# to cc the email_sender then set email_cc = email_sender
 code: |
+  # Uncomment to cc someone else
   # email_cc.name.first = 'Tania'
   # email_cc.name.last = 'Leiman'
   # email_cc.email = 'tania.leiman@flinders.edu.au'
-  email_cc = DAEmpty()
+  
+  # Uncomment to cc nobody
+  # email_cc = DAEmpty()
+  
+  # Uncomment to cc the sender
+  email_cc = email_sender
 ---
 # Text to be displayed as the review meeting timeframe.
 # Used in the receipt email.  Need to specity 'in' or 'on'
 # depending on the rest of the string so that it appears
 # to be grammatically correct.
 code: |
-  review_meeting_timeframe = 'in early July'
+  review_meeting_timeframe = 'in early 2021'
 ---
 # Text to be displayed for client to complete 
 # Application Review Form
 code: |
-  arf_completion_date = 'by **3 July 2020**'
+  arf_completion_date = 'by **24 December 2020**'
 ---
 # Text to display when email for review meeting
 # will be sent
 code: |
-  rm_notif_date = 'at the end of June'
+  rm_notif_date = 'in early 2021'
 ---

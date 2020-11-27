@@ -60,7 +60,9 @@ class MJFClientData(DAObject):
             result_item['email'] = row['Email']
             result_item['app_name'] = row['Name of App']
             result_item['app_link'] = row['Link to App']
-            result_item['licence_agreement'] = row['Licence Agreement']
+            result_item['video_link'] = row['Link to Video']
+            # Not using this right now
+            #result_item['licence_agreement'] = row['Licence Agreement']
             self.clients_list.append(result_item)
 
     def get_populated(self):
